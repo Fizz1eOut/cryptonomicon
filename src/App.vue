@@ -1,46 +1,11 @@
 <template>
   <div class="cryptonomicon">
     <div class="cryptonomicon__container container">
-      <section >
-        <div class="cryptonomicon__group">
-          <div class="cryptonomicon__row">
-            <label 
-            for="wallet" 
-            class="cryptonomicon__label"
-            >Тикер</label
-            >
-
-            <input
-            v-model="ticker"
-            @keydown.enter="add"
-            type="text"
-            name="wallet"
-            id="wallet"
-            class="cryptonomicon__input"
-            placeholder="Например BTC"
-            />
-          </div>
-        </div>
-        <button
-          @click="add"
-          type="button"
-          class="cryptonomicon__button"
-        >
-          <svg
-            class="cryptonomicon__svg"
-            xmlns="http://www.w3.org/2000/svg"
-            width="30"
-            height="30"
-            viewBox="0 0 24 24"
-            fill="#ffffff"
-          >
-            <path
-              d="M13 7h-2v4H7v2h4v4h2v-4h4v-2h-4V7zm-1-5C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"
-            ></path>
-          </svg>
-          Добавить
-        </button>
-      </section>
+      
+      <add-ticker 
+          @add-ticker="add" 
+          :disabled="tooManyTickersAdded" 
+      />
 
       <template v-if="tickers.length">
           <div class="cryptonomicon__filter filter-cryptonomicon">
@@ -163,14 +128,19 @@
 
 <script>
 import { subscribeToTicker, unsubscribeFromTicker } from "./api";
+import AddTicker from "./AddTicker.vue"
 
 export default {
 name: "App",
 
+  components: {
+      AddTicker,
+  },
+
 data() {
   return {
-  // Ввод данных в инпут Тикер 
-    ticker: "",
+  // // Ввод данных в инпут Тикер 
+  //   ticker: "",
   
     // Ввод данных в инпут Фильтр 
     filter: '',
@@ -238,6 +208,9 @@ beforeUnmount() {
 
 
 computed: {
+  tooManyTickersAdded() {
+    return this.tickers.length > 24;
+  },
 
   // фильтрация = const start = (this.page  - 1) * 8;
   startIndex() {
@@ -321,16 +294,15 @@ methods: {
   },
 
   // добавление тикера
-  add() {
+  add(ticker) {
     const currentTicker = {
-      name: this.ticker,
+      name: ticker,
       price: "-"
     };
 
-    if (this.ticker) {
+    if (ticker) {
       this.tickers = [...this.tickers, currentTicker];
     }
-    this.ticker = "";
     this.filter = '';
     subscribeToTicker(currentTicker.name, newPrice =>
       this.updateTicker(currentTicker.name, newPrice)
@@ -399,55 +371,6 @@ methods: {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 15px;
-}
-.cryptonomicon__row {
-  width: 100%;
-}
-.cryptonomicon__label {
-  font-size: 30px;
-  color: black;
-}
-.cryptonomicon__input {
-  margin-top: 10px;
-  display: flex; 
-  align-items: center; 
-  justify-content: center;
-  max-width: 300px;
-  width: 100%;
-  padding: 10px 20px;
-  border: 1px solid black;
-  outline-color: blue;
-  border-radius: 10px;
-  font-size: 20px;
-  color: black;
-}
-.cryptonomicon__button {
-  margin-top: 10px;
-  padding: 10px;
-  max-width: 200px;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  font-size: 20px;
-  border-radius: 10px;
-  border: 1px solid black;
-  cursor: pointer;
-  color: black;
-  background-color: transparent;
-  transition: all 0.3s ease-in-out;
-}
-.cryptonomicon__button:hover {
-  color: blue;
-  border: 1px solid blue;
-}
-.cryptonomicon__button:hover .cryptonomicon__svg {
-  fill: blue;
-}
-.cryptonomicon__svg {
-  fill: black;
-  transition: all 0.3s ease-in-out;
 }
 .filter-cryptonomicon__row {
   display: flex;
