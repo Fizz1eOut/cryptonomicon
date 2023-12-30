@@ -1,34 +1,33 @@
 <template>
-  <div class="container mx-auto flex flex-col items-center bg-gray-100 p-4">
-    <div class="container">
-      <div class="w-full my-4"></div>
-      <section>
-        <div class="flex">
-          <div class="max-w-xs">
-            <label for="wallet" class="block text-sm font-medium text-gray-700"
-              >Тикер</label
+  <div class="cryptonomicon">
+    <div class="cryptonomicon__container container">
+      <section >
+        <div class="cryptonomicon__group">
+          <div class="cryptonomicon__row">
+            <label 
+            for="wallet" 
+            class="cryptonomicon__label"
+            >Тикер</label
             >
-            <div class="mt-1 relative rounded-md shadow-md">
-              <input
-                v-model="ticker"
-                @keydown.enter="add"
-                type="text"
-                name="wallet"
-                id="wallet"
-                class="block w-full pr-10 border-gray-300 text-gray-900 focus:outline-none focus:ring-gray-500 focus:border-gray-500 sm:text-sm rounded-md"
-                placeholder="Например DOGE"
-              />
-            </div>
+
+            <input
+            v-model="ticker"
+            @keydown.enter="add"
+            type="text"
+            name="wallet"
+            id="wallet"
+            class="cryptonomicon__input"
+            placeholder="Например BTC"
+            />
           </div>
         </div>
         <button
           @click="add"
           type="button"
-          class="my-4 inline-flex items-center py-2 px-4 border border-transparent shadow-sm text-sm leading-4 font-medium rounded-full text-white bg-gray-600 hover:bg-gray-700 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+          class="cryptonomicon__button"
         >
-          <!-- Heroicon name: solid/mail -->
           <svg
-            class="-ml-0.5 mr-2 h-6 w-6"
+            class="cryptonomicon__svg"
             xmlns="http://www.w3.org/2000/svg"
             width="30"
             height="30"
@@ -44,50 +43,62 @@
       </section>
 
       <template v-if="tickers.length">
-        <hr class="w-full border-t border-gray-600 my-4" />
-        <div>
-          <button
-            class="my-4 mx-2 inline-flex items-center py-2 px-4 border border-transparent shadow-sm text-sm leading-4 font-medium rounded-full text-white bg-gray-600 hover:bg-gray-700 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
-            v-if="page > 1"
-            @click="page = page - 1"
-          >
-            Назад
-          </button>
-          <button
-            class="my-4 mx-2 inline-flex items-center py-2 px-4 border border-transparent shadow-sm text-sm leading-4 font-medium rounded-full text-white bg-gray-600 hover:bg-gray-700 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
-            @click="page = page + 1"
-            v-if="hasNextPage"
-          >
-            Вперед
-          </button>
-          <div>Фильтр: <input v-model="filter" /></div>
-        </div>
-        <hr class="w-full border-t border-gray-600 my-4" />
-        <dl class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-3">
+          <div class="cryptonomicon__filter filter-cryptonomicon">
+              <hr class="cryptonomicon__border"/>
+              <div class="filter-cryptonomicon__row">
+                  <h2 class="filter-cryptonomicon__title">Фильтр:</h2>
+
+                  <input 
+                  v-model="filter"
+                  class="filter-cryptonomicon__input" 
+                  type="text"
+                  >
+              </div>
+
+              <div class="filter-cryptonomicon__buttons">
+                  <button 
+                  class="filter-cryptonomicon__button"
+                  v-if="page > 1"
+                  @click="page = page - 1"
+                  >
+                      Назад
+                  </button>
+
+                  <button 
+                  class="filter-cryptonomicon__button"
+                  v-if="hasNextPage"
+                  @click="page = page + 1"
+                  >
+                      Вперед
+                  </button>
+              </div>  
+          </div>
+        <hr class="cryptonomicon__border"/>
+        <dl class="cryptonomicon__items">
           <div
             v-for="t in paginatedTickers"
             :key="t.name"
             @click="select(t)"
             :class="{
-              'border-4': selectedTicker === t
+              'cryptonomicon__item--target': selectedTicker === t
             }"
-            class="bg-white overflow-hidden shadow rounded-lg border-purple-800 border-solid cursor-pointer"
+            class="cryptonomicon__item"
           >
-            <div class="px-4 py-5 sm:p-6 text-center">
-              <dt class="text-sm font-medium text-gray-500 truncate">
+            <div class="cryptonomicon__text">
+              <dt class="cryptonomicon__name">
                 {{ t.name }} - USD
               </dt>
-              <dd class="mt-1 text-3xl font-semibold text-gray-900">
-                {{ t.price }}
+              <dd class="cryptonomicon__price">
+                {{ formatPrice(t.price) }}
               </dd>
             </div>
-            <div class="w-full border-t border-gray-200"></div>
+            <!-- <div class="w-full border-t border-gray-200"></div> -->
             <button
               @click.stop="handleDelete(t)"
-              class="flex items-center justify-center font-medium w-full bg-gray-100 px-4 py-4 sm:px-6 text-md text-gray-500 hover:text-gray-600 hover:bg-gray-200 hover:opacity-20 transition-all focus:outline-none"
+              class="cryptonomicon-button__delete"
             >
               <svg
-                class="h-5 w-5"
+                class="cryptonomicon-button__delete--svg"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 20 20"
                 fill="#718096"
@@ -97,29 +108,31 @@
                   fill-rule="evenodd"
                   d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
                   clip-rule="evenodd"
-                ></path></svg>
+                ></path>
+                </svg>
                 Удалить
             </button>
           </div>
         </dl>
-        <hr class="w-full border-t border-gray-600 my-4" />
+        <hr class="cryptonomicon__border" />
       </template>
-      <section v-if="selectedTicker" class="relative">
-        <h3 class="text-lg leading-6 font-medium text-gray-900 my-8">
+
+      <section v-if="selectedTicker" class="cryptonomico-graph">
+        <h3 class="cryptonomico-graph__title">
           {{ selectedTicker.name }} - USD
         </h3>
-        <div class="flex items-end border-gray-600 border-b border-l h-64">
-          <div
-            v-for="(bar, idx) in normalizedGraph"
-            :key="idx"
-            :style="{ height: `${bar}%` }"
-            class="bg-purple-800 border w-10"
+        <div class="cryptonomico-graph__items" ref="graph">
+          <div 
+          v-for="(bar, index) in normalizedGraph"
+          :key="index"
+          :style="{ height: `${bar}%` }"
+          class="cryptonomico-graph__item"
           ></div>
         </div>
         <button
           @click="selectedTicker = null"
           type="button"
-          class="absolute top-0 right-0"
+          class="cryptonomico-graph__button"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -149,187 +162,443 @@
 </template>
 
 <script>
-// [x] 6. Наличие в состоянии ЗАВИСИМЫХ ДАННЫХ | Критичность: 5+
-// [ ] 4. Запросы напрямую внутри компонента (???) | Критичность: 5
-// [ ] 2. При удалении остается подписка на загрузку тикера | Критичность: 5
-// [ ] 5. Обработка ошибок API | Критичность: 5
-// [ ] 3. Количество запросов | Критичность: 4
-// [x] 8. При удалении тикера не изменяется localStorage | Критичность: 4
-// [x] 1. Одинаковый код в watch | Критичность: 3
-// [ ] 9. localStorage и анонимные вкладки | Критичность: 3
-// [ ] 7. График ужасно выглядит если будет много цен | Критичность: 2
-// [ ] 10. Магические строки и числа (URL, 5000 миллисекунд задержки, ключ локал стораджа, количество на странице) |  Критичность: 1
-
-// Параллельно
-// [x] График сломан если везде одинаковые значения
-// [x] При удалении тикера остается выбор
+import { subscribeToTicker, unsubscribeFromTicker } from "./api";
 
 export default {
-  name: "App",
+name: "App",
 
-  data() {
-    return {
-      ticker: "",
-      filter: "",
+data() {
+  return {
+  // Ввод данных в инпут Тикер 
+    ticker: "",
+  
+    // Ввод данных в инпут Фильтр 
+    filter: '',
 
-      tickers: [],
-      selectedTicker: null,
+  // массив тикеров
+    tickers: [],
 
-      graph: [],
+  // Текущий тикер
+  selectedTicker: null,
 
-      page: 1
-    };
-  },
+  // данные состояния. График.
+    graph: [],
+    maxGrapgElements: 1,
 
-  created() {
-    const windowData = Object.fromEntries(
-      new URL(window.location).searchParams.entries()
-    );
+    // текущая страница
+    page: 1,
+  };
+},
 
-    const VALID_KEYS = ["filter", "page"];
+// метод жизниного цикла
+created() {
+  // Грузим данные из 'Урла'
+  const windowData = Object.fromEntries(
+    new URL(window.location).searchParams.entries()
+  );
 
-    VALID_KEYS.forEach(key => {
-      if (windowData[key]) {
-        this[key] = windowData[key];
-      }
-    });
+  const VALID_KEYS = ["filter", "page"];
 
-    // if (windowData.filter) {
-    //   this.filter = windowData.filter;
-    // }
-
-    // if (windowData.page) {
-    //   this.page = windowData.page;
-    // }
-
-    const tickersData = localStorage.getItem("cryptonomicon-list");
-
-    if (tickersData) {
-      this.tickers = JSON.parse(tickersData);
-      this.tickers.forEach(ticker => {
-        this.subscribeToUpdates(ticker.name);
-      });
+  VALID_KEYS.forEach(key => {
+    if (windowData[key]) {
+      this[key] = windowData[key];
     }
+  });
+
+
+  // if (windowData.filter) {
+  //   this.filter = windowData.filter;
+  // }
+
+  // if (windowData.page) {
+  //   this.page = windowData.page;
+  // }
+
+  // Грузим информацию в LocalStorage
+  const tickersData = localStorage.getItem('cryptonomicon-list');
+  if (tickersData) {
+    this.tickers = JSON.parse(tickersData);
+    this.tickers.forEach(ticker => {
+      subscribeToTicker(ticker.name, newPrice =>
+        this.updateTicker(ticker.name, newPrice)
+      );
+    });
+  }
+
+  setInterval(this.updateTickers, 5000);
+},
+
+mounted() {
+  window.addEventListener("resize", this.calculateMaxGraphElements);
+},
+
+beforeUnmount() {
+  window.removeEventListener("resize", this.calculateMaxGraphElements);
+},
+
+
+computed: {
+
+  // фильтрация = const start = (this.page  - 1) * 8;
+  startIndex() {
+      return (this.page - 1) * 8;
   },
 
-  computed: {
-    startIndex() {
-      return (this.page - 1) * 6;
-    },
+  // фильтрация = const end = this.page * 8;
+  endIndex() {
+      return this.page * 8;
+  },
 
-    endIndex() {
-      return this.page * 6;
-    },
+   // ищем все тикеры, которые подходят нашему введенному фильтру
+   filteredTickers() {
+     return this.tickers.filter(ticker => ticker.name.includes(this.filter));
+  },
 
-    filteredTickers() {
-      return this.tickers.filter(ticker => ticker.name.includes(this.filter));
-    },
-
-    paginatedTickers() {
+  //
+  paginatedTickers() {
       return this.filteredTickers.slice(this.startIndex, this.endIndex);
-    },
+  },
 
-    hasNextPage() {
+  // this.hasNextPage = filteredTickers.length > end;
+  hasNextPage() {
       return this.filteredTickers.length > this.endIndex;
-    },
+  },
 
-    normalizedGraph() {
+  // график
+  normalizedGraph() {
       const maxValue = Math.max(...this.graph);
       const minValue = Math.min(...this.graph);
 
       if (maxValue === minValue) {
-        return this.graph.map(() => 50);
+          return this.graph.map(() => 50);
       }
 
       return this.graph.map(
-        price => 5 + ((price - minValue) * 95) / (maxValue - minValue)
+          price => 5 + ((price - minValue) * 95) / (maxValue - minValue)
       );
-    },
+  },
 
-    pageStateOptions() {
+  //
+  pageStateOptions() {
       return {
-        filter: this.filter,
-        page: this.page
+          filter: this.filter,
+          page: this.page,
       };
+  },
+},
+
+methods: {
+  calculateMaxGraphElements() {
+    if (!this.$refs.graph) {
+      return;
     }
+
+    this.maxGraphElements = this.$refs.graph.clientWidth / 38;
   },
 
-  methods: {
-    subscribeToUpdates(tickerName) {
-      setInterval(async () => {
-        const f = await fetch(
-          `https://min-api.cryptocompare.com/data/price?fsym=${tickerName}&tsyms=USD&api_key=00b544301b62bb3bde0e54ab7d88bd82f23a9574b2c9164945cc950f25aeafa0`
-        );
-        const data = await f.json();
 
-        // currentTicker.price =  data.USD > 1 ? data.USD.toFixed(2) : data.USD.toPrecision(2);
-        this.tickers.find(t => t.name === tickerName).price =
-          data.USD > 1 ? data.USD.toFixed(2) : data.USD.toPrecision(2);
+  // Получаем данные с сервера
+  updateTicker(tickerName, price) {
+    this.tickers.filter(t => t.name === tickerName).forEach(t => {
+        if (t === this.selectedTicker) {
+          this.graph.push(price);
 
-        if (this.selectedTicker?.name === tickerName) {
-          this.graph.push(data.USD);
+          while (this.graph.length > this.maxGraphElements) {
+            this.graph.shift();
+          }
+
         }
-      }, 3000);
-      this.ticker = "";
-    },
-
-    add() {
-      const currentTicker = {
-        name: this.ticker,
-        price: "-"
-      };
-
-      this.tickers = [...this.tickers, currentTicker];
-      this.filter = "";
-
-      this.subscribeToUpdates(currentTicker.name);
-    },
-
-    select(ticker) {
-      console.log(ticker);
-      this.selectedTicker = ticker;
-    },
-
-    handleDelete(tickerToRemove) {
-      this.tickers = this.tickers.filter(t => t !== tickerToRemove);
-      if (this.selectedTicker === tickerToRemove) {
-        this.selectedTicker = null;
-      }
-    }
+        
+        t.price = price;
+      });
   },
 
-  watch: {
-    selectedTicker() {
-      this.graph = [];
-    },
-
-    tickers(newValue, oldValue) {
-      // Почему не сработал watch при добавлении?
-      console.log(newValue === oldValue);
-      localStorage.setItem("cryptonomicon-list", JSON.stringify(this.tickers));
-    },
-
-    paginatedTickers() {
-      if (this.paginatedTickers.length === 0 && this.page > 1) {
-        this.page -= 1;
-      }
-    },
-
-    filter() {
-      this.page = 1;
-    },
-
-    pageStateOptions(value) {
-      window.history.pushState(
-        null,
-        document.title,
-        `${window.location.pathname}?filter=${value.filter}&page=${value.page}`
-      );
+  formatPrice(price) {
+    if (price === "-") {
+      return price;
     }
+    return price > 1 ? price.toFixed(2) : price.toPrecision(2);
+  },
+
+  // добавление тикера
+  add() {
+    const currentTicker = {
+      name: this.ticker,
+      price: "-"
+    };
+
+    if (this.ticker) {
+      this.tickers = [...this.tickers, currentTicker];
+    }
+    this.ticker = "";
+    this.filter = '';
+    subscribeToTicker(currentTicker.name, newPrice =>
+      this.updateTicker(currentTicker.name, newPrice)
+    );
+  },
+
+  // Выбор тикер и его очищение при смены таргета
+  select(ticker) {
+      this.selectedTicker = ticker;
+  },
+
+  // Удаление тикера
+  handleDelete(tickerToRemove) {
+    this.tickers = this.tickers.filter(t => t !== tickerToRemove);
+
+  // При удаление тикера удаляем график
+    if (this.selectedTicker === tickerToRemove) {
+      this.selectedTicker = null;
+    }
+    unsubscribeFromTicker(tickerToRemove.name);
+  },
+},
+
+  // реагируем на изминения переменных с помощью watch
+  watch: {
+      // Когда изменяется выбранный тикер, то сбрасываем график
+      selectedTicker() {
+          this.graph = [];
+
+          this.$nextTick().then(this.calculateMaxGraphElements);
+      },
+
+      // когда меняются тикеры, сохранять в LocalStorage
+      tickers() {
+          localStorage.setItem('cryptonomicon-list', JSON.stringify(this.tickers));
+      },
+
+      // Если на странице нету тикеров, то сбросить страницу назад(Например, страница 3, удаляем все элементы там и переходим на страницу 2)
+      paginatedTickers() {
+          if (this.paginatedTickers.length === 0 && this.page > 1) {
+              this.page -= 1;
+          }
+      },
+
+
+      // если изменился фильтр, обновляет URL страницы
+      filter() {
+          this.page = 1;
+      },
+
+      // если изменилась страничка, обновляет URL страницы
+      pageStateOptions(value) {
+          window.history.pushState(
+          null,
+          document.title,
+          `${window.location.pathname}?filter=${value.filter}&page=${value.page}`
+          );
+      }
   }
 };
+
 </script>
 
+<style scoped>
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 15px;
+}
+.cryptonomicon__row {
+  width: 100%;
+}
+.cryptonomicon__label {
+  font-size: 30px;
+  color: black;
+}
+.cryptonomicon__input {
+  margin-top: 10px;
+  display: flex; 
+  align-items: center; 
+  justify-content: center;
+  max-width: 300px;
+  width: 100%;
+  padding: 10px 20px;
+  border: 1px solid black;
+  outline-color: blue;
+  border-radius: 10px;
+  font-size: 20px;
+  color: black;
+}
+.cryptonomicon__button {
+  margin-top: 10px;
+  padding: 10px;
+  max-width: 200px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-size: 20px;
+  border-radius: 10px;
+  border: 1px solid black;
+  cursor: pointer;
+  color: black;
+  background-color: transparent;
+  transition: all 0.3s ease-in-out;
+}
+.cryptonomicon__button:hover {
+  color: blue;
+  border: 1px solid blue;
+}
+.cryptonomicon__button:hover .cryptonomicon__svg {
+  fill: blue;
+}
+.cryptonomicon__svg {
+  fill: black;
+  transition: all 0.3s ease-in-out;
+}
+.filter-cryptonomicon__row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.filter-cryptonomicon__title {
+  font-size: 25px;
+  color: black;
+}
+.filter-cryptonomicon__input {
+  display: flex; 
+  align-items: center; 
+  justify-content: center;
+  max-width: 150px;
+  width: 100%;
+  padding: 10px 20px;
+  border: 1px solid black;
+  outline-color: blue;
+  border-radius: 10px;
+  font-size: 16px;
+  color: black;
+}
+.filter-cryptonomicon__buttons {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.filter-cryptonomicon__button {
+  padding: 10px;
+  max-width: 150px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-size: 16px;
+  border-radius: 10px;
+  border: 1px solid black;
+  cursor: pointer;
+  color: black;
+  background-color: transparent;
+  transition: all 0.3s ease-in-out;
+}
+.filter-cryptonomicon__button:hover {
+  color: blue;
+  border: 1px solid blue;
+}
+.cryptonomicon__items {
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  column-gap: 40px;
+  row-gap: 40px;
+}
 
+.cryptonomicon__item {
+  max-width: 230px;
+  width: 100%;
+  text-align: center;
+  padding: 20px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.cryptonomicon__item--target {
+  border: 3px solid blue;
+}
+.cryptonomicon__text {
+  text-align: center;
+}
+.cryptonomicon__name {
+  font-size: 16px;
+  color: gray;
+  margin: 0;
+}
+.cryptonomicon__price {
+  font-size: 20px;
+  color: black;
+  padding: 10px 0;
+  margin: 0;
+}
+.cryptonomicon-button__delete {
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  background-color: transparent;
+  transition: all 0.3s ease-in-out;
+}
+.cryptonomicon-button__delete:hover {
+  color: blue;
+}
+.cryptonomicon-button__delete:hover .cryptonomicon-button__delete--svg {
+  fill: blue;
+}
+.cryptonomicon-button__delete--svg {
+  width: 20px;
+  height: 20px;
+  transition: all 0.3s ease-in-out;
+}
+.cryptonomico-graph {
+  position: relative;
+}
+.cryptonomico-graph__title {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  --text-opacity: 1;
+  color: #1a202c;
+  color: rgba(26, 32, 44, var(--text-opacity));
+  font-size: 1.125rem;
+}
+.cryptonomico-graph__items {
+  display: flex;
+  align-items: flex-end;
+  height: 16rem;
+  border-left-width: 1px;
+  border-bottom-width: 1px;
+  --border-opacity: 1;
+  border-color: #718096;
+  border-color: rgba(113, 128, 150, var(--border-opacity));
 
-<style src="./app.css"></style>
+}
+.cryptonomico-graph__item {
+  width: 2.5rem;
+  height: 6rem;
+  --bg-opacity: 1;
+  background-color: blue;
+  background-color: rgba(0, 0, 153, var(--bg-opacity));
+  border-width: 1px;
+  
+}
+.cryptonomico-graph__button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: transparent;
+  background-image: none;
+  cursor: pointer;
+}
+*, ::before, ::after {
+  box-sizing: border-box;
+  border-width: 0;
+  border-style: solid;
+  border-color: #e2e8f0;
+}
+.cryptonomicon__border {
+  border: 1px solid rgb(188 187 187);
+}
+</style>
