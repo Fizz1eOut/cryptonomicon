@@ -3,8 +3,10 @@
     <div class="cryptonomicon__container container">
       
       <add-ticker 
-          @add-ticker="add" 
-          :disabled="tooManyTickersAdded" 
+          @add-ticker="add"
+          :disabled="tooManyTickersAdded"
+          :has-ticker="hasTicker"
+          @focus="hasTicker = false"
       />
 
       <template v-if="tickers.length">
@@ -57,7 +59,7 @@
                 {{ formatPrice(t.price) }}
               </dd>
             </div>
-            <!-- <div class="w-full border-t border-gray-200"></div> -->
+
             <button
               @click.stop="handleDelete(t)"
               class="cryptonomicon-button__delete"
@@ -137,8 +139,11 @@ name: "App",
       AddTicker,
   },
 
+
 data() {
   return {
+      hasTicker: false,
+
   // // Ввод данных в инпут Тикер 
   //   ticker: "",
   
@@ -208,6 +213,10 @@ beforeUnmount() {
 
 
 computed: {
+  suggestions() {
+      return console.log(this.tickers)
+  },
+
   tooManyTickersAdded() {
     return this.tickers.length > 24;
   },
@@ -261,6 +270,7 @@ computed: {
 },
 
 methods: {
+
   calculateMaxGraphElements() {
     if (!this.$refs.graph) {
       return;
@@ -292,17 +302,22 @@ methods: {
     }
     return price > 1 ? price.toFixed(2) : price.toPrecision(2);
   },
-
+  
   // добавление тикера
   add(ticker) {
     const currentTicker = {
-      name: ticker,
+      name: ticker.toUpperCase(),
       price: "-"
     };
 
-    if (ticker) {
+    if (!this.tickers.some(t => t.name === currentTicker.name)) {
       this.tickers = [...this.tickers, currentTicker];
+      // console.log(this.tickers)
+      this.hasTicker = false;
+    } else {
+      this.hasTicker = true;
     }
+
     this.filter = '';
     subscribeToTicker(currentTicker.name, newPrice =>
       this.updateTicker(currentTicker.name, newPrice)
