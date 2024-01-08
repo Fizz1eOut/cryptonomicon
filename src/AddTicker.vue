@@ -18,9 +18,21 @@
                   placeholder="Например BTC"
               />
           </div>
-          <ul v-if="matched.length > 0" class="cryptonomicon__matched">
-              <li v-for="symbol in matched" :key="symbol" @click="addCoin(symbol)">{{ symbol.Symbol }}</li>
-          </ul>
+          <transition name="fade">
+              <ul v-if="matched.length > 0" class="cryptonomicon__matched">
+                  <transition-group name="fade">
+                  <li 
+                      v-for="symbol in matched" 
+                      :key="symbol"
+                      @click="addCoin(symbol)"
+                      class="cryptonomicon__matched--item"
+                  >
+                  {{ symbol.Symbol }}         
+                  </li>
+              </transition-group>  
+              </ul>
+          </transition>
+          
       </div>
 
       <p 
@@ -115,6 +127,13 @@ methods: {
 </script>
 
 <style scoped>
+
+.fade-enter-active, .fade-leave-active {
+transition: opacity .5s ease-in-out;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active до версии 2.1.8 */ {
+opacity: 0;
+}
 .cryptonomicon__message {
   font-style: 16px;
   color: red;
@@ -145,5 +164,23 @@ methods: {
   align-items: center;
   gap: 20px;
 }
-ul { list-style: none; }
+ul { 
+  list-style: none;
+  padding: 0;
+  padding-left: 10px;
+  }
+.cryptonomicon__matched--item {
+  font-size: 18px;
+  transition: all 0.3s ease-in-out;
+}
+.cryptonomicon__matched--item:hover {
+  color: blue;
+  text-decoration: underline;
+  cursor: pointer;
+}
+@media (max-width: 390px) {
+  .cryptonomicon__input {
+      max-width: 280px;
+  }
+}
 </style>

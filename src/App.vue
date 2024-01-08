@@ -383,160 +383,165 @@ methods: {
 
 <style scoped>
 .container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 15px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
 }
 .filter-cryptonomicon__row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 .filter-cryptonomicon__title {
-  font-size: 25px;
-  color: black;
+    font-size: 25px;
+    color: black;
 }
 .filter-cryptonomicon__input {
-  display: flex; 
-  align-items: center; 
-  justify-content: center;
-  max-width: 150px;
-  width: 100%;
-  padding: 10px 20px;
-  border: 1px solid black;
-  outline-color: blue;
-  border-radius: 10px;
-  font-size: 16px;
-  color: black;
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+    max-width: 150px;
+    width: 100%;
+    padding: 10px 20px;
+    border: 1px solid black;
+    outline-color: blue;
+    border-radius: 10px;
+    font-size: 16px;
+    color: black;
 }
 .filter-cryptonomicon__buttons {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 .filter-cryptonomicon__button {
-  padding: 10px;
-  max-width: 150px;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  font-size: 16px;
-  border-radius: 10px;
-  border: 1px solid black;
-  cursor: pointer;
-  color: black;
-  background-color: transparent;
-  transition: all 0.3s ease-in-out;
+    padding: 10px;
+    max-width: 150px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-size: 16px;
+    border-radius: 10px;
+    border: 1px solid black;
+    cursor: pointer;
+    color: black;
+    background-color: transparent;
+    transition: all 0.3s ease-in-out;
 }
 .filter-cryptonomicon__button:hover {
-  color: blue;
-  border: 1px solid blue;
+    color: blue;
+    border: 1px solid blue;
 }
 .cryptonomicon__items {
-  display: flex;
-  align-items: flex-start;
-  flex-wrap: wrap;
-  column-gap: 40px;
-  row-gap: 40px;
+    display: flex;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    column-gap: 40px;
+    row-gap: 40px;
 }
 
 .cryptonomicon__item {
-  max-width: 230px;
-  width: 100%;
-  text-align: center;
-  padding: 20px;
-  border-radius: 10px;
-  cursor: pointer;
+    max-width: 230px;
+    width: 100%;
+    text-align: center;
+    padding: 20px;
+    border-radius: 10px;
+    cursor: pointer;
 }
 .cryptonomicon__item--target {
-  border: 3px solid blue;
+    border: 3px solid blue;
 }
 .cryptonomicon__text {
-  text-align: center;
+    text-align: center;
 }
 .cryptonomicon__name {
-  font-size: 16px;
-  color: gray;
-  margin: 0;
+    font-size: 16px;
+    color: gray;
+    margin: 0;
 }
 .cryptonomicon__price {
-  font-size: 20px;
-  color: black;
-  padding: 10px 0;
-  margin: 0;
+    font-size: 20px;
+    color: black;
+    padding: 10px 0;
+    margin: 0;
 }
 .cryptonomicon-button__delete {
-  padding: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  width: 100%;
-  border-radius: 10px;
-  border: none;
-  cursor: pointer;
-  background-color: transparent;
-  transition: all 0.3s ease-in-out;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    background-color: transparent;
+    transition: all 0.3s ease-in-out;
 }
 .cryptonomicon-button__delete:hover {
-  color: blue;
+    color: blue;
 }
 .cryptonomicon-button__delete:hover .cryptonomicon-button__delete--svg {
-  fill: blue;
+    fill: blue;
 }
 .cryptonomicon-button__delete--svg {
-  width: 20px;
-  height: 20px;
-  transition: all 0.3s ease-in-out;
+    width: 20px;
+    height: 20px;
+    transition: all 0.3s ease-in-out;
 }
 .cryptonomico-graph {
-  position: relative;
+    position: relative;
 }
 .cryptonomico-graph__title {
-  margin-top: 2rem;
-  margin-bottom: 2rem;
-  --text-opacity: 1;
-  color: #1a202c;
-  color: rgba(26, 32, 44, var(--text-opacity));
-  font-size: 1.125rem;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    --text-opacity: 1;
+    color: #1a202c;
+    color: rgba(26, 32, 44, var(--text-opacity));
+    font-size: 1.125rem;
 }
 .cryptonomico-graph__items {
-  display: flex;
-  align-items: flex-end;
-  height: 16rem;
-  border-left-width: 1px;
-  border-bottom-width: 1px;
-  --border-opacity: 1;
-  border-color: #718096;
-  border-color: rgba(113, 128, 150, var(--border-opacity));
+    display: flex;
+    align-items: flex-end;
+    height: 16rem;
+    border-left-width: 1px;
+    border-bottom-width: 1px;
+    --border-opacity: 1;
+    border-color: #718096;
+    border-color: rgba(113, 128, 150, var(--border-opacity));
 
 }
 .cryptonomico-graph__item {
-  width: 2.5rem;
-  height: 6rem;
-  --bg-opacity: 1;
-  background-color: blue;
-  background-color: rgba(0, 0, 153, var(--bg-opacity));
-  border-width: 1px;
-  
+    width: 2.5rem;
+    height: 6rem;
+    --bg-opacity: 1;
+    background-color: blue;
+    background-color: rgba(0, 0, 153, var(--bg-opacity));
+    border-width: 1px;
+    
 }
 .cryptonomico-graph__button {
-  position: absolute;
-  top: 0;
-  right: 0;
-  background-color: transparent;
-  background-image: none;
-  cursor: pointer;
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: transparent;
+    background-image: none;
+    cursor: pointer;
 }
 *, ::before, ::after {
-  box-sizing: border-box;
-  border-width: 0;
-  border-style: solid;
-  border-color: #e2e8f0;
+    box-sizing: border-box;
+    border-width: 0;
+    border-style: solid;
+    border-color: #e2e8f0;
 }
 .cryptonomicon__border {
-  border: 1px solid rgb(188 187 187);
+    border: 1px solid rgb(188 187 187);
 }
+@media (max-width: 480px) {
+    .cryptonomicon__items {
+        justify-content: center;
+    }
+  }
 </style>
