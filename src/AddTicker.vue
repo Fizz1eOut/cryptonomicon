@@ -21,15 +21,15 @@
           <transition name="fade">
               <ul v-if="matched.length > 0" class="cryptonomicon__matched">
                   <transition-group name="fade">
-                  <li 
-                      v-for="symbol in matched" 
-                      :key="symbol"
-                      @click="addCoin(symbol)"
-                      class="cryptonomicon__matched--item"
-                  >
-                  {{ symbol.Symbol }}         
-                  </li>
-              </transition-group>  
+                    <li 
+                        v-for="symbol in matched" 
+                        :key="symbol"
+                        @click="addCoin(symbol)"
+                        class="cryptonomicon__matched--item"
+                    >
+                    {{ symbol.Symbol }}         
+                    </li>
+                  </transition-group>  
               </ul>
           </transition>
           
